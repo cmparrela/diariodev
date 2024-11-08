@@ -1,6 +1,5 @@
 ---
 date: '2024-11-05T21:09:33-03:00'
-draft: true
 title: 'Criando API Rest com Golang e AWS Lambda'
 ---
 
@@ -95,7 +94,52 @@ Neste post, vamos mostrar um exemplo utilizando o framework Fiber.
 No arquivo `main.go`, adicione o seguinte código para criar uma rota simples que retorna um JSON com a mensagem "Hello, World!":
 ```golang
 // main.go
-// Código será adicionado aqui
+package main
+
+import (
+	"context"
+	"log"
+	"os"
+
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
+	fiberadapter "github.com/awslabs/aws-lambda-go-api-proxy/fiber"
+	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
+)
+
+var fiberLambda *fiberadapter.FiberLambda
+var app *fiber.App
+
+func init() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("error loading .env file: %v", err)
+	}
+
+	app = fiber.New()
+
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.SendString("Hello, World!")
+	})
+
+	fiberLambda = fiberadapter.New(app)
+}
+
+func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	return fiberLambda.ProxyWithContext(ctx, req)
+}
+
+func main() {
+	if os.Getenv("LAMBDA_ENABLED") == "true" {
+		lambda.Start(Handler)
+	} else {
+		err := app.Listen(":3000")
+		if err != nil {
+			panic(err)
+		}
+	}
+}
 ```
 
 Não se esqueça de rodar o `go mod init` para inicializar o módulo do Go e o `go mod tidy` para instalar as dependências.
@@ -106,7 +150,43 @@ Agora, vamos criar o arquivo `template.yaml` para configurar o deploy no AWS Lam
 
 ```yaml
 # template.yaml
-# Código será adicionado aqui
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    Timeout: 5
+    MemorySize: 128
+    Environment:
+      Variables:
+        LAMBDA_ENABLED: true
+        
+  Api:
+    Cors:
+      AllowMethods: "'GET,POST,OPTIONS'"
+      AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+      AllowOrigin: "'*'"
+
+Resources:
+  Fiber:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: go1.x
+    Properties:
+      CodeUri: .
+      Handler: bootstrap
+      Runtime: provided.al2023
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: any
+
+Outputs:
+  ApiUrl:
+    Description: "URL for the API endpoint"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
 ```
 
 Este arquivo define a função Lambda e a configuração do API Gateway para expor sua API. Ele será utilizado para realizar o deploy da aplicação no AWS Lambda.
