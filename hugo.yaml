@@ -1,6 +1,4 @@
 baseURL: https://example.org/
-languageCode: pt-BR
-title: Diário Dev
 theme: ["PaperMod"]
 
 enableRobotsTXT: true
@@ -12,40 +10,76 @@ minify:
   disableXML: true
   minifyOutput: true
 
-menu:
-  main:
-    - name: Pesquisa
-      url: search/
-      weight: 5
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
 
 pygmentsUseClasses: true
 markup:
   highlight:
     noClasses: false
-    
+
 defaultContentLanguage: "pt"
+languages:
+  pt:
+    languageName: "Português"
+    weight: 1
+    contentDir: "content/pt"
+    languageCode: pt-BR
+    title: "Diário Dev"
+    params:
+      description: "Diário Dev é um blog pessoal sobre desenvolvimento de software, tecnologia e outras coisas."
+      dateFormat: "02/01/2006"
+      homeInfoParams:
+        ImageUrl: "logo.png" 
+        Title: "Bem-vindo ao Diário Dev"
+        Content: > 
+          Este é um espaço onde compartilho experiências e conhecimentos sobre desenvolvimento de software. Aproveite e explore nossos conteúdos!
+    menu:
+      main:
+        - name: "Pesquisa"
+          url: "search"
+          weight: 5
+  en:
+    languageName: "English"
+    weight: 2
+    contentDir: "content/en"
+    languageCode: en-US
+    title: "Dev Diary"
+    params:
+      description: "Dev Diary is a personal blog about software development, technology, and other things."
+      dateFormat: "January 2, 2006"
+      homeInfoParams:
+        ImageUrl: "logo.png" 
+        Title: "Welcome to Dev Diary"
+        Content: >
+          This is a space where I share experiences and knowledge about software development. Enjoy and explore our content!
+    menu:
+      main:
+        - name: "Search"
+          url: "search"
+          weight: 5
 
 params:
   env: production
-  title: Diário Dev
-  description: "Diário Dev é um blog pessoal sobre desenvolvimento de software, tecnologia e outras coisas."
-  author: Cristopher Parrela
-  DateFormat: "02/01/2006"
-  defaultTheme: auto # dark, light
+  author: ["Cristopher Parrela"]
+  defaultTheme: auto
   disableThemeToggle: false
-  ShowReadingTime: true
-  ShowShareButtons: false
-  ShowPostNavLinks: false
-  ShowBreadCrumbs: false
-  ShowCodeCopyButtons: true
-  ShowWordCount: false
-  ShowRssButtonInSectionTermList: true
-  UseHugoToc: true
-  ShowToc: true
-  TocOpen: true
+  showReadingTime: true
+  showShareButtons: false
+  showPostNavLinks: true
+  showBreadCrumbs: false
+  showCodeCopyButtons: true
+  showWordCount: false
+  showRssButtonInSectionTermList: true
+  useHugoToc: true
+  showToc: true
+  tocOpen: true
   disableSpecial1stPost: false
   disableScrollToTop: false
-  comments: true
+  comments: false
   hidemeta: false
   hideSummary: false
   displayFullLangName: true
@@ -55,26 +89,15 @@ params:
     favicon16x16: "favicon.png"
     favicon32x32: "favicon.png"
 
-  label:
-    text: "Diário Dev"
-    icon: /apple-touch-icon.png
-    iconHeight: 35
-
-  homeInfoParams:
-    Title: "Bem-vindo ao Diário Dev"
-    Content: > 
-      Olá, sou desenvolvedor de software e aqui compartilho um pouco do que aprendo e descubro no mundo da Programação. Seja bem-vindo!
-
   socialIcons:
     - name: linkedin
       url: "https://www.linkedin.com/in/cmparrela/"
     - name: github
       url: "https://github.com/cmparrela"
 
- # TODO
-  # analytics:
-  #   google:
-  #     SiteVerificationTag: "XYZabc"
+  analytics:
+    google:
+      SiteVerificationTag: "G-F1QMN2ZB9X"
   #   bing:
   #     SiteVerificationTag: "XYZabc"
   #   yandex:
@@ -87,35 +110,4 @@ params:
     distance: 1000
     threshold: 0.4
     minMatchCharLength: 0
-    limit: 10
     keys: ["title", "permalink", "summary", "content"]
-
-languages:
-  pt:
-    languageName: "Português"
-    weight: 1
-    contentDir: "content/pt"
-    title: "Diário Dev"
-    description: "Diário Dev é um blog pessoal sobre desenvolvimento de software, tecnologia e outras coisas."
-    params:
-      author: Cristopher Parrela
-      DateFormat: "02/01/2006"
-    menu:
-      main:
-        - name: "Pesquisa"
-          url: "search"
-          weight: 5
-  en:
-    languageName: "English"
-    weight: 2
-    contentDir: "content/en"
-    title: "Dev Diary"
-    description: "Dev Diary is a personal blog about software development, technology, and other things."
-    params:
-      author: Cristopher Parrela
-      DateFormat: "January 2, 2006"
-    menu:
-      main:
-        - name: "Search"
-          url: "search"
-          weight: 5
