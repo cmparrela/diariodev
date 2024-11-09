@@ -97,11 +97,7 @@ params:
 
   analytics:
     google:
-      SiteVerificationTag: "G-F1QMN2ZB9X"
-  #   bing:
-  #     SiteVerificationTag: "XYZabc"
-  #   yandex:
-  #     SiteVerificationTag: "XYZabc"
+      SiteVerificationTag: "G-ZFDMWCJ0S0"
 
   fuseOpts:
     isCaseSensitive: false
