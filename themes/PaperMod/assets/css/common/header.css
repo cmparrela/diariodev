@@ -91,3 +91,11 @@ body:not(.dark) #sun {
 .logo-switches {
     flex-wrap: inherit;
 }
+
+body img.logo-personal {
+    content: url('/logo-dark.png');
+}
+
+body.dark img.logo-personal {
+    content: url('/logo-white.png');
+}

@@ -1,4 +1,4 @@
-baseURL: https://example.org/
+baseURL: https://diariodev.tech/
 theme: ["PaperMod"]
 
 enableRobotsTXT: true
@@ -33,7 +33,6 @@ languages:
       description: "Diário Dev é um blog pessoal sobre desenvolvimento de software, tecnologia e outras coisas."
       dateFormat: "02/01/2006"
       homeInfoParams:
-        ImageUrl: "logo.png" 
         Title: "Bem-vindo ao Diário Dev"
         Content: > 
           Este é um espaço onde compartilho experiências e conhecimentos sobre desenvolvimento de software. Aproveite e explore nossos conteúdos!
@@ -52,7 +51,6 @@ languages:
       description: "Dev Diary is a personal blog about software development, technology, and other things."
       dateFormat: "January 2, 2006"
       homeInfoParams:
-        ImageUrl: "logo.png" 
         Title: "Welcome to Dev Diary"
         Content: >
           This is a space where I share experiences and knowledge about software development. Enjoy and explore our content!

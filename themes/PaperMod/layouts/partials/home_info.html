@@ -2,8 +2,7 @@
 <article class="first-entry home-info">
     <header class="entry-header">
         <div class="header-content">
-            <img draggable="false" src="{{ .imageUrl | absURL }}" alt="{{ .title }}" title="{{ .title }}"
-                height="{{ .imageHeight | default 120 }}" width="{{ .imageWidth | default 120 }}" />
+            <img draggable="false" class="logo-personal" src="" alt="{{ .title }}" title="{{ .title }}" height="120"  />
             <h1>{{ .Title | markdownify }}</h1>
         </div>
     </header>
@@ -23,6 +22,6 @@
     align-items: flex-end;
 }
 .header-content img {
-    margin-right: 10px; 
+    margin-right: 25px; 
 }
 </style>
