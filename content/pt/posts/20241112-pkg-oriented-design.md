@@ -1,12 +1,12 @@
 ---
-date: '2024-11-11T21:09:33-03:00'
-title: 'Oreganizando Projetos Go com Package Oriented Design'
+date: '2024-11-12T09:02:00-03:00'
+title: 'Organizando Projetos Go com Package Oriented Design'
 showToc: false
 ---
 
 Neste post, vamos explorar como organizar um projeto em Go. Diferente de outras linguagens, onde frameworks geralmente oferecem padrões de organização de código, em Go temos liberdade para organizar o projeto da maneira que preferirmos. Isso é bom, mas sem um padrão claro, o código pode se tornar desorganizado e difícil de manter. Por isso, é essencial estabelecer uma estrutura que permita aos desenvolvedores localizar facilmente onde cada parte do código deve ser colocada.
 
-Nessa estrutura vamos conseguir aplicar os principios de Clean Architecture e usar as vantagens da linguagem Go para criar um projeto bem organizado e fácil de manter. Vale ressaltar que a estrutura deve mudar de acordo com as necessidades de cada projeto, então é importante adaptar para o contexto específico.
+Nessa estrutura vamos conseguir aplicar os princípios de Clean Architecture e usar as vantagens da linguagem Go para criar um projeto bem organizado e fácil de manter. Vale ressaltar que a estrutura deve mudar de acordo com as necessidades de cada projeto, então é importante adaptar para o contexto específico.
 
 Go é uma linguagem organizada em pacotes, e por isso é fundamental pensar na estrutura do projeto de forma que os pacotes sejam bem definidos e de fácil entendimento. Algumas diretrizes ajudam a manter a organização e a qualidade do código:
 
@@ -31,16 +31,18 @@ Vamos começar pela pasta `cmd`, onde fica o código principal da aplicação, o
 
 # domain
 
-**Tipos de dominio (domain types)**
+**Dominio (domain types)**
 
 A pasta `domain` é onde ficam os tipos de domínio da aplicação. Tipos de domínio são estruturas de dados que representam os conceitos principais do negócio da aplicação. Por exemplo, em um sistema de vendas, os tipos de domínio poderiam incluir `Order`, `Product`, `Customer`. Esses tipos refletem as entidades principais da aplicação.
 
+Então, vamos criar os tipos de domínio para o nosso projeto da seguinte forma:	
 ```bash
 ├── domain
 │   ├── product.go
 │   └── order.go
 ```
 
+O código dentro de cada arquivo seria algo assim:
 ```go
 // domain/product.go
 package domain
@@ -109,25 +111,43 @@ A pasta `internal` é onde fica o código que não deve ser acessado externament
 
 Observe que aqui é onde a lógica de negócio da aplicação é implementada. Cada tipo de domínio tem um arquivo `service.go` que contém a lógica de negócio para esse tipo. O arquivo `repository.go` contém a lógica de acesso a dados para esse tipo. O arquivo `handler.go` contém a lógica de manipulação de solicitações HTTP para esse tipo. O arquivo `dto.go` contém os tipos de dados de transferência que são usados para representar os dados que são passados entre as camadas.
 
-Se precisarmos fazer uma validação de dados de input para os métodos POST e PUT, podemos realizar essa validação no arquivo de DTO. Além disso, se precisarmos criar uma struct para representar os parâmetros de consulta (query params), também podemos fazer isso no arquivo de DTO.
+**DTO**
 
-Exemplos:
+Apesar de termos a pasta domain com a estrutura de dados que vamos armazenas no banco de dados, pode ser que precisemos de uma estrutura de dados diferente para representar os dados que queremos tratar como editaveis na nossa API. Para isso podemos usar o arquivo `dto.go` para criar essas estruturas. No caso de um endpoint `PUT` ou `POST` eu adiciono o sufixo `Input`, então para uma função de criação de pedidos, eu teria algo assim:
 
 ```go
 // internal/order/dto.go
 type CreateInput struct {
-	Customer string  `json:"question" validate:"required"`
-	Total    float64 `json:"answer" validate:"required"`
-	Status   string  `json:"type" validate:"required,oneof=pending approved"`
+	Customer string  `json:"customer" validate:"required"`
+	Total    float64 `json:"total" validate:"required"`
+	Status   string  `json:"status" validate:"required,oneof=pending approved"`
 }
+```
 
+No caso de um endpoint `GET` para aqueles que vão ter query params, eu adiciono o sufixo `Params`, então para uma funcão de listagem de pedidos, eu teria algo assim:
+
+```go
+// internal/order/dto.go
+type ListParams struct {
+	Customer string `json:"customer"`
+}
+```
+
+Para definir o payload de resposta dos endpoints, você pode criar uma nova struct específica para o retorno. Nesse caso, eu utilizo o sufixo `Response`.
+
+```go
+// internal/order/dto.go
 type CreateResponse struct {
 	Customer string      `json:"customer"`
 	Products []Product   `json:"products"`
 	Total    float64     `json:"total"`
 	Status   OrderStatus `json:"status"`
 }
-````
+```
+
+**Service**
+
+O service é onde a lógica de negócio é implementada. Ele é responsável por orquestrar as chamadas ao repositório, validar os dados de entrada e saída, e executar a lógica de negócio
 
 ```go
 // internal/order/service.go
@@ -162,7 +182,7 @@ func (s *service) Create(ctx context.Context, input CreateInput) (*domain.Order,
 		return nil, err
 	}
 
-	order := domain.Order{
+order := domain.Order{
 		Customer: input.Customer,
 		Total:    input.Total,
 		Status:   domain.OrderStatus(input.Status),
@@ -188,6 +208,7 @@ A pasta `config` é onde ficam os arquivos de configuração da aplicação.
 │   └── config.go
 ```
 
+Exemplo de arquivo de configuração:
 ```go
 //config/config.go
 package config

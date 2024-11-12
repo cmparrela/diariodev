@@ -1,5 +1,5 @@
 ---
-date: '2024-11-05T21:09:33-03:00'
+date: '2024-10-05T21:09:33-03:00'
 title: 'Criando API Rest com Golang e AWS Lambda'
 ---
 
