@@ -1,6 +1,6 @@
 ---
 date: '2024-11-11T21:09:33-03:00'
-title: 'Organizando um projeto em Go orientado a pacotes'
+title: 'Oreganizando Projetos Go com Package Oriented Design'
 showToc: false
 ---
 
@@ -109,9 +109,75 @@ A pasta `internal` é onde fica o código que não deve ser acessado externament
 
 Observe que aqui é onde a lógica de negócio da aplicação é implementada. Cada tipo de domínio tem um arquivo `service.go` que contém a lógica de negócio para esse tipo. O arquivo `repository.go` contém a lógica de acesso a dados para esse tipo. O arquivo `handler.go` contém a lógica de manipulação de solicitações HTTP para esse tipo. O arquivo `dto.go` contém os tipos de dados de transferência que são usados para representar os dados que são passados entre as camadas.
 
-Se precisarmos fazer uma validaçao de dados de input para POST e PUT devemos fazer no arquivo de DTO.
+Se precisarmos fazer uma validação de dados de input para os métodos POST e PUT, podemos realizar essa validação no arquivo de DTO. Além disso, se precisarmos criar uma struct para representar os parâmetros de consulta (query params), também podemos fazer isso no arquivo de DTO.
 
-Se precisarmos criar uma struct para representar os querys params, devemos fazer no arquivo de DTO.
+Exemplos:
+
+```go
+// internal/order/dto.go
+type CreateInput struct {
+	Customer string  `json:"question" validate:"required"`
+	Total    float64 `json:"answer" validate:"required"`
+	Status   string  `json:"type" validate:"required,oneof=pending approved"`
+}
+
+type CreateResponse struct {
+	Customer string      `json:"customer"`
+	Products []Product   `json:"products"`
+	Total    float64     `json:"total"`
+	Status   OrderStatus `json:"status"`
+}
+````
+
+```go
+// internal/order/service.go
+package order
+
+import (
+	"context"
+
+	"github.com/cmparrela/ddev-pkg-oriented-design/domain"
+	"github.com/go-playground/validator/v10"
+)
+
+type Service interface {
+	Create(ctx context.Context, input CreateInput) (CreateResponse, error)
+}
+
+type service struct {
+	validator  validator.Validate
+	repository Repository
+}
+
+func NewService(validator validator.Validate, repository Repository) Service {
+	return &service{
+		validator:  validator,
+		repository: repository,
+	}
+}
+
+func (s *service) Create(ctx context.Context, input CreateInput) (*domain.Order, error) {
+	err := s.validator.Struct(input)
+	if err != nil {
+		return nil, err
+	}
+
+	order := domain.Order{
+		Customer: input.Customer,
+		Total:    input.Total,
+		Status:   domain.OrderStatus(input.Status),
+	}
+
+	order, err := s.repository.Create(ctx, order)
+	if err != nil {
+		return nil, err
+	}
+
+	return order, nil
+}
+```
+
+
 
 # config
 
