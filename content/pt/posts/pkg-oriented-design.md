@@ -197,8 +197,6 @@ order := domain.Order{
 }
 ```
 
-
-
 # config
 
 A pasta `config` é onde ficam os arquivos de configuração da aplicação.
