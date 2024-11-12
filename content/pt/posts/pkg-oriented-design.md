@@ -17,7 +17,7 @@ Go é uma linguagem organizada em pacotes, e por isso é fundamental pensar na e
 - Inversão de Dependência: Usar interfaces para abstrair dependências, especialmente pacotes externos, mantendo o código mais flexível e desacoplado.
 - Independência de Pacotes de Terceiros: Evite dependências diretas de pacotes externos, utilizando interfaces e sempre que possível, criando wrappers para interagir com essas dependências.
 
-# cmd
+## cmd
 
 Vamos começar pela pasta `cmd`, onde fica o código principal da aplicação, o arquivo `main.go`. Esse arquivo é responsável por integrar todas as dependências do projeto e gerar o executável. Podemos criar subpastas dentro de cmd para cada aplicação executável do projeto, como `api` e `worker`, organizando os pontos de entrada de cada serviço.
 
@@ -29,9 +29,9 @@ Vamos começar pela pasta `cmd`, onde fica o código principal da aplicação, o
 │       └── main.go 
 ```
 
-# domain
+## domain
 
-**Dominio (domain types)**
+### Dominio (domain types)
 
 A pasta `domain` é onde ficam os tipos de domínio da aplicação. Tipos de domínio são estruturas de dados que representam os conceitos principais do negócio da aplicação. Por exemplo, em um sistema de vendas, os tipos de domínio poderiam incluir `Order`, `Product`, `Customer`. Esses tipos refletem as entidades principais da aplicação.
 
@@ -92,7 +92,7 @@ type Order struct {
 
 ```
 
-# internal
+## internal
 A pasta `internal` é onde fica o código que não deve ser acessado externamente. O próprio Go impede que pacotes dentro da pasta internal possam ser acessados por outros arquivos fora do mesmo pacote `main`. Eu gosto de usar essa pasta para colocar a lógica de negócio da minha aplicação, separando-a em subpastas por domínio (domain types).
 
 ```bash
@@ -111,7 +111,7 @@ A pasta `internal` é onde fica o código que não deve ser acessado externament
 
 Observe que aqui é onde a lógica de negócio da aplicação é implementada. Cada tipo de domínio tem um arquivo `service.go` que contém a lógica de negócio para esse tipo. O arquivo `repository.go` contém a lógica de acesso a dados para esse tipo. O arquivo `handler.go` contém a lógica de manipulação de solicitações HTTP para esse tipo. O arquivo `dto.go` contém os tipos de dados de transferência que são usados para representar os dados que são passados entre as camadas.
 
-**DTO**
+### DTO
 
 Apesar de termos a pasta domain com a estrutura de dados que vamos armazenas no banco de dados, pode ser que precisemos de uma estrutura de dados diferente para representar os dados que queremos tratar como editaveis na nossa API. Para isso podemos usar o arquivo `dto.go` para criar essas estruturas. No caso de um endpoint `PUT` ou `POST` eu adiciono o sufixo `Input`, então para uma função de criação de pedidos, eu teria algo assim:
 
@@ -145,7 +145,7 @@ type CreateResponse struct {
 }
 ```
 
-**Service**
+### Service
 
 O service é onde a lógica de negócio é implementada. Ele é responsável por orquestrar as chamadas ao repositório, validar os dados de entrada e saída, e executar a lógica de negócio
 
@@ -197,7 +197,7 @@ order := domain.Order{
 }
 ```
 
-# config
+## config
 
 A pasta `config` é onde ficam os arquivos de configuração da aplicação.
 
@@ -227,7 +227,7 @@ func New() (cfg Config, err error) {
 
 ```
 
-# pkg
+## pkg
 A pasta `pkg` normalmente é utilizada para colocar lib interna, wrappers e código que pode ser reutilizado em outros projetos, por exemplo, um pacote de log, um pacote de conexão com banco de dados, etc
 
 ```bash
@@ -242,7 +242,7 @@ A pasta `pkg` normalmente é utilizada para colocar lib interna, wrappers e cód
 │       └── logger.go
 ```
 
-# Estrutura completa
+## Estrutura completa
 
 Aqui está a estrutura completa do projeto:
 
