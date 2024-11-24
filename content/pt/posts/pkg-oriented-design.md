@@ -2,6 +2,9 @@
 date: '2024-11-12T09:02:00-03:00'
 title: 'Organizando Projetos Go com Package Oriented Design'
 showToc: false
+categories:
+- Golang
+- Clean Architecture
 ---
 
 Neste post, vamos explorar como organizar um projeto em Go. Diferente de outras linguagens, onde frameworks geralmente oferecem padrões de organização de código, em Go temos liberdade para organizar o projeto da maneira que preferirmos. Isso é bom, mas sem um padrão claro, o código pode se tornar desorganizado e difícil de manter. Por isso, é essencial estabelecer uma estrutura que permita aos desenvolvedores localizar facilmente onde cada parte do código deve ser colocada.

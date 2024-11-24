@@ -1,6 +1,9 @@
 ---
 date: '2024-10-05T21:09:33-03:00'
 title: 'Criando API Rest com Golang e AWS Lambda'
+categories:
+- AWS Lambda
+- Golang
 ---
 
 Neste post, vamos explorar como construir uma API REST com Golang e fazer o deploy no AWS Lambda, aproveitando os benefícios do serverless para criar uma aplicação escalável e econômica.

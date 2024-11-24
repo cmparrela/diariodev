@@ -21,6 +21,9 @@ markup:
   highlight:
     noClasses: false
 
+taxonomies:
+  category: categories
+
 defaultContentLanguage: "pt"
 languages:
   pt:
@@ -41,6 +44,9 @@ languages:
         - name: "Pesquisa"
           url: "search"
           weight: 5
+        - name: "Categorias"
+          url: "categories"
+          weight: 5
   en:
     languageName: "English"
     weight: 2
@@ -58,6 +64,9 @@ languages:
       main:
         - name: "Search"
           url: "search"
+          weight: 5
+        - name: "Categories"
+          url: "categories"
           weight: 5
 
 params:
