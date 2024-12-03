@@ -1,7 +1,6 @@
 ---
-# date: '2024-10-05T21:09:33-03:00'
+date: '2024-12-03T18:11:00-03:00'
 title: 'Como fazer deploy de AWS Lambda Golang no GitHub Actions'
-draft: true
 showToc: false
 categories:
 - AWS Lambda
